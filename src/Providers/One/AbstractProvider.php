@@ -8,6 +8,11 @@ use BoxedCode\Authify\Providers\AbstractProvider as BaseProvider;
 
 abstract class AbstractProvider extends BaseProvider
 {
+    public function validateResponseData(array $response)
+    {
+        return isset($response['oauth_token']) && isset($response['oauth_verifier']);
+    }
+
     public function authorize(array $scopes = [])
     {
         // First part of OAuth 1.0 authentication is retrieving temporary credentials.
@@ -32,7 +37,7 @@ abstract class AbstractProvider extends BaseProvider
         }
 
         // Check the response token & verifier data exists.
-        if (!isset($response['oauth_token']) || !isset($response['oauth_verifier'])) {
+        if (!$this->validateResponseData($response)) {
             throw new NoAuthorizationException(
                 'There was no valid authorization token or verifier found in the response.'
             );

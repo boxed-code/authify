@@ -75,6 +75,7 @@ abstract class AbstractProvider
 
     abstract protected function createServer();
     abstract public function authorize(array $scopes = []);
+    abstract public function validateResponseData(array $response);
     abstract public function exchange(array $response);
     abstract public function request($uri, array $parameters = [], $method = 'GET');
 
