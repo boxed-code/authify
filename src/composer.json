@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BoxedCode\\Authify\\": "src/"
+            "BoxedCode\\Authify\\": "src/Authify/"
         }
     },
     "license": "MIT",
