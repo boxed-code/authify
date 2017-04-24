@@ -6,7 +6,7 @@ use BoxedCode\Authify\Providers\One\TwitterProvider;
 use BoxedCode\Authify\Providers\Two\FacebookProvider;
 use BoxedCode\Authify\Stores\AbstractStore as Store;
 
-class Manager
+class Factory
 {
     protected $transientStore;
 

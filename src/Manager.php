@@ -3,7 +3,7 @@
 namespace BoxedCode\Authify;
 
 use BoxedCode\Authify\Providers\AbstractProvider;
-use BoxedCode\Authify\Providers\Manager as ProviderManager;
+use BoxedCode\Authify\Providers\Factory;
 use BoxedCode\Authify\Stores\AbstractStore as Store;
 use Exception;
 
@@ -13,21 +13,21 @@ class Manager
 
     protected $configuration;
 
-    protected $providers;
+    protected $factory;
 
-    public function __construct(Store $configuration, Store $credentials, ProviderManager $providers)
+    public function __construct(Store $configuration, Store $credentials, Factory $factory)
     {
         $this->configuration = $configuration;
         
         $this->credentials = $credentials;
 
-        $this->providers = $providers;
+        $this->factory = $factory;
     }
 
     public function make($name, $handle, $credentials = null)
     {
         if ($configuration = $this->configuration->get($name, false)) {
-            return $this->providers->provider($name, $handle, $configuration, $credentials);
+            return $this->factory->provider($name, $handle, $configuration, $credentials);
         }
 
         throw new Exception(

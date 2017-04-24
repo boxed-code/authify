@@ -11,28 +11,28 @@
  * to persist these to file or a database.
  */
 
-// Store used to persist oAuth identifiers & secrets for each provider type (twitter, facebook, instagram, etc).
-$configurationStore = new FileStore(tempnam('/tmp', 'configuration'), [
+// Store used to persist oAuth identifiers & secrets.
+$configurationStore = new \BoxedCode\Authify\Stores\FileStore(tempnam('/tmp', 'configuration'), [
     'identifier' => 'my-twitter-app-id',
     'secret' => 'my-twitter-app-secret'
 ]);
 
 // To persist provider access tokens for reuse, we can create multiple instances of each 
 // provider, this enables us to support multiple twitter accounts.
-$credentialsStore = new FileStore(tempnam('/tmp', 'credentials'));
+$credentialsStore = new \BoxedCode\Authify\Stores\FileStore(tempnam('/tmp', 'credentials'));
 
 // Used to store temporary session data / credentials during the authorisation & exchange process.
-$temporaryStore = new SessionStore('session_transient_store');
+$temporaryStore = new \BoxedCode\Authify\Stores\SessionStore('session_transient_store');
 
 /*
  * Setup the provider & instance managers.
  */
 
-// Create a new provider manager;
-$providerManager = new ProviderManager($sessionStore);
+// Create a new provider factory;
+$providerManager = new \BoxedCode\Authify\Providers\Factory($sessionStore);
 
 // Create a new instance manager.
-$instanceManager = new Manager($configurationStore, $credentialsStore, $providerManager);
+$instanceManager = new \BoxedCode\Authify\Manager($configurationStore, $credentialsStore, $providerManager);
 
 /*
  * Start the fun...
