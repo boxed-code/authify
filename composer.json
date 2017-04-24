@@ -1,5 +1,5 @@
 {
-    "name": "boxedcode/authify",
+    "name": "boxed-code/authify",
     "description": "PHP oAuth 1 & 2 client and configuration manager, powered by the PHP leagues oAuth clients.",
     "type": "library",
     "require": {
