@@ -6,7 +6,7 @@ class SessionStore extends AbstractStore
 {
     protected $sessionKey = 'AUTHIFY_SESSION_STORE';
 
-    public function __construct($sessionKey = '')
+    public function __construct($sessionKey = '', $default = [])
     {
         if (!empty($sessionKey)) {
             $this->sessionKey = $sessionKey;
@@ -17,7 +17,7 @@ class SessionStore extends AbstractStore
         }
 
         if (!$_SESSION[$this->sessionKey]) {
-            $_SESSION[$this->sessionKey] = serialize([]);
+            $_SESSION[$this->sessionKey] = serialize($default);
         }
     }
 
