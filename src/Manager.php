@@ -53,6 +53,7 @@ class Manager
     public function get($handle)
     {
         if ($this->has($handle)) {
+            $credentials = $this->credentials->get($handle, false);
             $tokens = unserialize($credentials['tokens']);
             return $this->make($credentials['provider'], $handle, $tokens);
         }
