@@ -47,7 +47,7 @@ class FacebookProvider extends AbstractProvider
         );
     }
 
-    public function postStatusAsPage($page_id, $message, $parameters)
+    public function postStatusAsPage($page_id, $message, $parameters = [])
     {
         // Get page token
         $page = $this->getPage($page_id, ['fields' => 'access_token']);
@@ -60,10 +60,10 @@ class FacebookProvider extends AbstractProvider
         return $this->postStatus($page_id, $message, $parameters);
     }
 
-    public function getUserPages()
+    public function getUserPages($parameters = [])
     {
         return $this->request(
-            'https://graph.facebook.com/me/accounts'
+            'https://graph.facebook.com/me/accounts', $parameters
         );
     }
 
