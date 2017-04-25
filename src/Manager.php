@@ -24,7 +24,17 @@ class Manager
         $this->factory = $factory;
     }
 
-    public function make($name, $handle, $credentials = null)
+    public function getCredentialsStore()
+    {
+        return $this->credentials;
+    }
+
+    public function getConfigurationStore()
+    {
+        return $this->configuration;
+    }
+
+    public function make($name, $handle = '', $credentials = null)
     {
         if ($configuration = $this->configuration->get($name, false)) {
             return $this->factory->provider($name, $handle, $configuration, $credentials);
@@ -35,9 +45,14 @@ class Manager
         );
     }
 
+    public function has($handle)
+    {
+        return $this->credentials->get($handle, false) ? true : false;
+    }
+
     public function get($handle)
     {
-        if ($credentials = $this->credentials->get($handle, false)) {
+        if ($this->has($handle)) {
             $tokens = unserialize($credentials['tokens']);
             return $this->make($credentials['provider'], $handle, $tokens);
         }
@@ -55,8 +70,12 @@ class Manager
         $this->credentials->put($provider->getHandle(), $credentials);
     }
 
-    public function destroy(AbstractProvider $provider)
+    public function destroy($handle)
     {
-        $this->credentials->destroy($provider->getHandle());
+        if ($handle instanceof AbstractProvider) {
+            $handle = $provider->getHandle();
+        }
+
+        $this->credentials->destroy($handle);
     }
 }
