@@ -15,6 +15,11 @@ class TwitterProvider extends AbstractProvider
         ));
     }
 
+    public function getUserDetails()
+    {
+        return $this->getServer()->getUserDetails($this->credentials);
+    }
+
     public function getUserTimeline($screenName, $parameters = [])
     {
         $parameters = array_merge($parameters, ['screen_name' => $screenName]);
