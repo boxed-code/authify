@@ -41,6 +41,7 @@ class ConcreteConfigStore extends AbstractStore
         }
 
         $this->configuration->save($this->getConfigurationKeyName($handle), $credentials);
+        $this->configuration->set($this->getConfigurationKeyName($handle), $credentials);
     }
 
     public function get($handle)
