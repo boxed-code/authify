@@ -7,11 +7,6 @@ use League\OAuth2\Client\Provider\AbstractProvider as LeagueProvider;
 
 abstract class AbstractProvider extends BaseProvider
 {
-    public function validateResponseData(array $response)
-    {
-        return isset($response['code']);
-    }
-
     public function authorize(array $scopes = [])
     {
         $url = $this->getServer()->getAuthorizationUrl([
@@ -33,7 +28,7 @@ abstract class AbstractProvider extends BaseProvider
         }
 
         // Check the response token & verifier data exists.
-        if (!$this->validateResponseData($response)) {
+        if (!isset($response['code'])) {
             throw new NoAuthorizationException(
                 'There was no valid authorization code found in the response.'
             );
@@ -61,6 +56,26 @@ abstract class AbstractProvider extends BaseProvider
             $method, $url, $this->getCredentials()
         );
 
-        return $this->getParsedResponse($request);
+        $response = $this->getResponse($request);
+
+        if ($response instanceof \GuzzleHttp\Psr7\Response) {
+            $response = $response->getBody();
+        }
+
+        // Try parsing JSON.
+        if (!is_array($response)) {
+            $content = json_decode($response, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new UnexpectedValueException(sprintf(
+                    "Failed to parse JSON response: %s",
+                    json_last_error_msg()
+                ));
+            }
+
+            return $content;
+        }
+
+        return $response;
     }
 }
