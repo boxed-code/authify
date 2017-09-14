@@ -7,6 +7,11 @@ use League\OAuth2\Client\Provider\AbstractProvider as LeagueProvider;
 
 abstract class AbstractProvider extends BaseProvider
 {
+    public function validateResponseData(array $response)
+    {
+        return isset($response['code']);
+    }
+
     public function authorize(array $scopes = [])
     {
         $url = $this->getServer()->getAuthorizationUrl([
@@ -28,7 +33,7 @@ abstract class AbstractProvider extends BaseProvider
         }
 
         // Check the response token & verifier data exists.
-        if (!isset($response['code'])) {
+        if (!$this->validateResponseData($response)) {
             throw new NoAuthorizationException(
                 'There was no valid authorization code found in the response.'
             );
